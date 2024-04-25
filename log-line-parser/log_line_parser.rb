@@ -8,16 +8,12 @@ class LogLineParser
     @message.strip
   end
 
-  def level
-    # @level[1..-2].downcase
-    @level.gsub(/[\[\]]/, '').downcase
-  end
-
   def log_level
-    level
+     # @level[1..-2].downcase
+     @level.gsub(/[\[\]]/, '').downcase
   end
 
   def reformat
-    "#{message} (#{level})"
+    "#{message} (#{log_level})"
   end
 end

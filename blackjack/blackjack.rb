@@ -30,9 +30,17 @@ module Blackjack
       HIGH = "high",
       BLACKJACK = "blackjack",
     ].freeze
+
+    RANGE = {
+      4..11 => LOW,
+      12..16 => MID,
+      17..20 => HIGH,
+      21..21 => BLACKJACK,
+    }
+
   end
 
-  CARD_TO_VALUE = {
+  CARD = {
     Constants::JOKER => 0,
     Constants::TWO => 2,
     Constants::THREE => 3,
@@ -49,59 +57,46 @@ module Blackjack
     Constants::ACE => 11,
   }
 
-  CARD_FALLBACK_VALUE = 0
+  CARD.default = 0
+
+  def self.two_aces?(card1, card2)
+    [card1, card2].all?(Constants::ACE)
+  end
 
   def self.parse_card(card)
-    CARD_TO_VALUE.fetch(card, CARD_FALLBACK_VALUE)
+    CARD[card]
   end
 
   def self.card_range(card1, card2)
     c1, c2 = parse_card(card1), parse_card(card2)
     score = c1 + c2
-
-    case score
-    when (4..11)
-      Constants::LOW
-    when (12..16)
-      Constants::MID
-    when (17..20)
-      Constants::HIGH
-    when 21
-      Constants::BLACKJACK
-    end
+    Constants::RANGE.select { |range, _| range.cover?(score) }.values.first
   end
 
   def self.first_turn(card1, card2, dealer_card)
     c_range = card_range(card1, card2)
+    dealer_card_score = parse_card(dealer_card)
 
     # If you have a pair of aces you must always split them.
-    if card1 == Constants::ACE and card2 == Constants::ACE
-      Constants::SPLIT
+    return Constants::SPLIT if two_aces?(card1, card2)
 
     # If your cards sum up to 11 or lower you should always hit.
-    elsif c_range == Constants::LOW
-      Constants::HIT
+    return Constants::HIT if c_range == Constants::LOW
+    # If your cards sum up to a value within the range [17, 20]
+    # you should always stand
+    return Constants::STAND if c_range == Constants::HIGH
 
     # If your cards sum up to a value within the range [12, 16]
     # you should always stand unless the dealer has a 7 or higher,
     # in which case you should always hit.
-    elsif c_range == Constants::MID
-      dc = parse_card(dealer_card)
-      dc >= 7 ? Constants::HIT : Constants::STAND
-    # If your cards sum up to a value within the range [17, 20]
-    # you should always stand
-    elsif c_range == Constants::HIGH
-      Constants::STAND
+    if c_range == Constants::MID
+      dealer_card_score >= 7 ? Constants::HIT : Constants::STAND
 
     # If you have a Blackjack (two cards that sum up to a value of 21), and the dealer does not have an ace,
     # a figure or a ten then you automatically win. If the dealer does have any of those cards
     # then you'll have to stand and wait for the reveal of the other card.
     elsif c_range == Constants::BLACKJACK
-      if not [Constants::TEN, Constants::ACE].include?(dealer_card)
-        Constants::WIN
-      else
-        Constants::STAND
-      end
+      dealer_card_score < 10 ?  Constants::WIN : Constants::STAND
     end
   end
 end

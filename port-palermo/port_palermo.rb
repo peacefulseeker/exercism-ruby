@@ -3,14 +3,8 @@ module Port
   TERMINAL_A = :A
   TERMINAL_B = :B
 
-  CITY_TO_IDENTIFIER = {
-    'Hamburg' => :HAMB,
-    'Rome' => :ROME,
-    'Kiel' => :KIEL
-  }.freeze
-
   def self.get_identifier(city)
-    CITY_TO_IDENTIFIER[city]
+    city[..3].upcase.to_sym
   end
 
   def self.get_terminal(ship_identifier)

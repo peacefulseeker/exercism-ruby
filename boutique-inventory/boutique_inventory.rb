@@ -16,7 +16,7 @@ class BoutiqueInventory
   end
 
   def stock_for_item(name)
-    @items.select { |item| item[:name] == name }.first[:quantity_by_size]
+    @items.find { |item| item[:name] == name }[:quantity_by_size]
   end
 
   def total_stock

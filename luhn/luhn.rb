@@ -1,17 +1,16 @@
 module Luhn
   def self.valid?(string)
-    return false if string.scan(/[^0-9\s]/).any?
-
+    string = string.gsub("\s", '') # string = string.delete()
     digits = string.scan(/\d/).map(&:to_i)
-    return false if digits.length < 2
+    return false if string.length < 2 || digits.size != string.size
 
-    doubled = digits.reverse.map.with_index do |digit, index|
-      next if index.even?
+    sum = digits.reverse.each_with_index.sum do |digit, index|
+      next digit if index.even?
 
       doubled = digit * 2
       doubled < 10 ? doubled : doubled - 9
     end
 
-    (doubled.reverse.sum % 10).zero?
+    (sum % 10).zero?
   end
 end

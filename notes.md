@@ -20,3 +20,10 @@ String.upcase # returns the uppercase version of a string
 String.reverse # Returns a new string with the characters from self in reverse order.
 String.reverse! # Returns self with its characters reversed (in-place)
 ```
+
+
+### Console / irb
+```shell
+
+puts # adds new line after each argument
+print # puts all args on same line, and "\n" needed

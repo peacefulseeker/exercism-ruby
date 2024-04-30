@@ -1,11 +1,12 @@
 class Raindrops
   def self.convert(number)
-    res = ''
-    res += 'Pling' if (number % 3).zero?
-    res += 'Plang' if (number % 5).zero?
-    res += 'Plong' if (number % 7).zero?
-    return res unless res.empty?
+    string = ''
+    # alternative string compsing
+    # string << 'Pling' if (number % 3).zero?
+    string += 'Pling' if (number % 3).zero?
+    string += 'Plang' if (number % 5).zero?
+    string += 'Plong' if (number % 7).zero?
 
-    number.to_s
+    string.empty? ? number.to_s : string
   end
 end

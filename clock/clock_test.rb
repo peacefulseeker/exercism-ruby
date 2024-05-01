@@ -14,6 +14,10 @@ class ClockTest < Minitest::Test
     assert_equal '00:00', Clock.new(hour: 24).to_s
   end
 
+  def test_six_o_six
+    assert_equal '06:06', Clock.new(hour: 6, minute: 6).to_s
+  end
+
   def test_hour_rolls_over
     assert_equal '01:00', Clock.new(hour: 25).to_s
   end

@@ -1,5 +1,5 @@
 class SpaceAge
-  ONE_YEAR_ON_EARTH_IN_SECONDS = 31_557_600
+  ONE_YEAR_ON_EARTH_IN_SECONDS = (60 * 60 * 24 * 365.25).to_f.freeze
 
   PLANET_AGE_RATIO = {
     'earth' => 1,
@@ -20,9 +20,9 @@ class SpaceAge
   # def on_mercury
   # def on_venus
   # and so on
-  PLANET_AGE_RATIO.each_key do |planet|
+  PLANET_AGE_RATIO.each do |planet, ratio|
     define_method "on_#{planet}" do
-      @seconds / (PLANET_AGE_RATIO[planet] * ONE_YEAR_ON_EARTH_IN_SECONDS).to_f
+      @seconds / (ratio * ONE_YEAR_ON_EARTH_IN_SECONDS).to_f
     end
   end
 end

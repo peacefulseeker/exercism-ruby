@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+# require_relative 'tournament_ErikSchierboom'
 require_relative 'tournament'
 
 class TournamentTest < Minitest::Test

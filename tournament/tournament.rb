@@ -9,80 +9,86 @@ class Tournament
     ].freeze
   end
 
-  RESULT_TO_POINTS = {
-    Constants::WIN => 3,
-    Constants::DRAW => 1,
-    Constants::LOSS => 0
-  }.freeze
-
-  RESULT_TO_POINTS_FOR_TEAM2 = {
-    Constants::WIN => RESULT_TO_POINTS[Constants::LOSS],
-    Constants::DRAW => RESULT_TO_POINTS[Constants::DRAW],
-    Constants::LOSS => RESULT_TO_POINTS[Constants::WIN]
-  }.freeze
-
   def initialize
     @teams = {}
   end
 
   def self.tally(input)
-    new.tally(input)
+    new.tally(input.split(/\n/))
   end
 
-  def tally(input)
-    rows = input.split(/\n/)
+  def tally(rows)
     rows.each do |row|
       team1_name, team2_name, result = row.split(';')
 
-      team1 = get_or_create_team(team1_name)
-      team2 = get_or_create_team(team2_name)
+      teams[team1_name] ||= Team.new(team1_name)
+      teams[team2_name] ||= Team.new(team2_name)
 
-      # TODO: make dry / optimal
-      team1.matches += 1
-      team1.draws += result == Constants::DRAW ? 1 : 0
-      team1.points += RESULT_TO_POINTS[result]
-      team1.wins += result == Constants::WIN ? 1 : 0
-      team1.losses += result == Constants::LOSS ? 1 : 0
-
-      team2.matches += 1
-      team2.draws += result == Constants::DRAW ? 1 : 0
-      team2.points += RESULT_TO_POINTS_FOR_TEAM2[result]
-      team2.wins += result == Constants::LOSS ? 1 : 0
-      team2.losses += result == Constants::WIN ? 1 : 0
+      case result
+      when Constants::LOSS
+        teams[team1_name].losses += 1
+        teams[team2_name].wins += 1
+      when Constants::WIN
+        teams[team1_name].wins += 1
+        teams[team2_name].losses += 1
+      when Constants::DRAW
+        teams[team1_name].draws += 1
+        teams[team2_name].draws += 1
+      end
     end
 
-    # TODO: sort in place?
-    teams_sorted = teams.sort_by { |name, result| [-result.points, name] }.to_h
-
-    result = "#{'Team'.ljust(30)} | MP |  W |  D |  L |  P\n"
-    teams_sorted.each do |team|
-      result << <<~RESULTS
-        #{team[0].ljust(30)} | \
-        #{team[1].matches.to_s.rjust(2)} | \
-        #{team[1].wins.to_s.rjust(2)} | \
-        #{team[1].draws.to_s.rjust(2)} | \
-        #{team[1].losses.to_s.rjust(2)} | \
-        #{team[1].points.to_s.rjust(2)}
-      RESULTS
-    end
-
-    result
+    render_results
   end
 
   private
 
   attr_reader :teams
 
-  def get_or_create_team(name)
-    return teams[name] if teams.key?(name)
+  def header
+    "Team                           | MP |  W |  D |  L |  P\n"
+  end
 
-    teams[name] = OpenStruct.new({
-                                   points: 0,
-                                   matches: 0,
-                                   wins: 0,
-                                   losses: 0,
-                                   draws: 0
-                                 })
-    teams[name]
+  def teams_sorted
+    teams.values.sort_by { |team| [-team.points, team.name] }
+  end
+
+  def rows
+    teams_sorted.map(&method(:row)).join
+  end
+
+  def row(team)
+    <<~RESULTS
+      #{team.name.ljust(30)} | \
+      #{team.matches.to_s.rjust(2)} | \
+      #{team.wins.to_s.rjust(2)} | \
+      #{team.draws.to_s.rjust(2)} | \
+      #{team.losses.to_s.rjust(2)} | \
+      #{team.points.to_s.rjust(2)}
+    RESULTS
+  end
+
+  def render_results
+    header + rows
+  end
+end
+
+class Team
+  attr_accessor :wins, :losses, :draws
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+    @wins = 0
+    @losses = 0
+    @draws = 0
+  end
+
+  def points
+    wins * 3 + draws
+  end
+
+  # each match can have only 1 result, hence can just sum up
+  def matches
+    wins + losses + draws
   end
 end

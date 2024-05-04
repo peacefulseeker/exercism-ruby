@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Team
   attr_accessor :name, :wins, :draws, :losses
 

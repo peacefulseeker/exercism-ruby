@@ -9,5 +9,10 @@
 #
 # See https://docs.rubocop.org/rubocop/configuration
 
+require: rubocop-minitest
+
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
+
+Style/Documentation:
+  Enabled: false

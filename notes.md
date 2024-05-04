@@ -38,3 +38,8 @@ String.tap
 
 puts # adds new line after each argument
 print # puts all args on same line, and "\n" needed
+
+```
+### Class
+```shell
+Class.instance_methods(include_super=false) # will output user-defined methods

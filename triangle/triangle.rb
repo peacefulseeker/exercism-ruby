@@ -4,11 +4,12 @@ class Triangle
   end
 
   def valid_triangle?
-    @sides.all?(&:positive?) && (
-      @sides[0] + @sides[1] >= @sides[2] &&
-      @sides[1] + @sides[2] >= @sides[0] &&
-      @sides[0] + @sides[2] >= @sides[1]
-    )
+    @sides.all?(&:nonzero?) &&
+      # @sides = [5, 4, 6]
+      # [5, 4, 6].combination(2) = [[5, 4], [5, 6], [4, 6]]
+      # 2 sides combinations + third side as array item
+      # [[5, 4], [5, 6], [4, 6]].zip([6, 4, 5]) = [[[5, 4], 6], [[5, 6], 4], [[4, 6], 5]]
+      @sides.combination(2).zip(@sides.reverse).all? { |a, b| a.sum >= b }
   end
 
   def equilateral?

@@ -15,6 +15,8 @@ colors[..1] == colors.take(2)  # take first 2 items from array
 # to symbols
 %i[foo bar baz] # => [:foo, :bar, :baz]
 %i[1 % *]       # => [:"1", :%, :*]
+
+[".", nil, "s", nil].compact # => [".", "s"]
 ```
 
 ### String & Regex

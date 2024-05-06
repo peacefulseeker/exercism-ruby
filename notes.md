@@ -7,6 +7,14 @@
 ### Array/Hash
 ```ruby
 colors[..1] == colors.take(2)  # take first 2 items from array
+
+
+# to strings
+%w[foo bar baz] # => ["foo", "bar", "baz"]
+%w[1 % *]       # => ["1", "%", "*"]
+# to symbols
+%i[foo bar baz] # => [:foo, :bar, :baz]
+%i[1 % *]       # => [:"1", :%, :*]
 ```
 
 ### String & Regex

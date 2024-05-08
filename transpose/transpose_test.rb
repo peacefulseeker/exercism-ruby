@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'transpose'
 
+# Transpose = Transpose3
+
 class TransposeTest < Minitest::Test
   def test_empty_string
     input = ''

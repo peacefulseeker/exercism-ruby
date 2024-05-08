@@ -1,6 +1,5 @@
 module ArmstrongNumbers
   def self.include?(number)
-    nums = number.to_s.chars
-    nums.map { |num| num.to_i**nums.size }.sum == number
+    number.digits.map { |n| n**number.digits.size }.sum == number
   end
 end

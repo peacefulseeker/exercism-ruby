@@ -14,23 +14,28 @@ class BeerSong
     Go to the store and buy some more, 99 bottles of beer on the wall.
   TEXT
 
-  def self.recite(start_bottles, take_bottles)
-    verses = []
+  def self.recite(verse, count)
+    new.recite(verse, count)
+  end
 
-    take_bottles.times do
-      verses << if start_bottles == 1
-                  VERSE_ONE_BOTTLE
-                elsif start_bottles.zero?
-                  VERSE_ZERO_BOTTLES
-                else
-                  left_bottles = start_bottles - 1
-                  left_bottles_str = "#{left_bottles} bottle"
-                  left_bottles_str += 's' if left_bottles > 1
-                  format(VERSE, start_bottles:, left_bottles: left_bottles_str)
-                end
-      start_bottles += -1
+  # inspired by https://exercism.org/tracks/ruby/exercises/beer-song/solutions/ajoshguy
+  def recite(start_bottles, take_bottles)
+    take_bottles.times.map { |bottle| verse(start_bottles - bottle) }.join("\n")
+  end
+
+  def verse(bottles)
+    if bottles == 1
+      VERSE_ONE_BOTTLE
+    elsif bottles.zero?
+      VERSE_ZERO_BOTTLES
+    else
+      format(VERSE, start_bottles: bottles, left_bottles: bottles_left(bottles - 1))
     end
+  end
 
-    verses.join("\n")
+  def bottles_left(bottles)
+    left_bottles_str = "#{bottles} bottle"
+    left_bottles_str += 's' if bottles > 1
+    left_bottles_str
   end
 end

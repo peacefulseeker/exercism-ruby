@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'sieve'
 
+# Sieve = Sieve2
+# Sieve = SieveEratosthenes
 class SieveTest < Minitest::Test
   def test_no_primes_under_two
     expected = []
@@ -23,6 +25,8 @@ class SieveTest < Minitest::Test
   end
 
   def test_find_primes_up_to_1000
+    require 'benchmark'
+
     expected = [
       2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59,
       61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139,
@@ -35,6 +39,11 @@ class SieveTest < Minitest::Test
       773, 787, 797, 809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877, 881, 883,
       887, 907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983, 991, 997
     ]
-    assert_equal expected, Sieve.new(1000).primes
+    result = nil
+    time = Benchmark.realtime do
+      result = Sieve.new(1000).primes
+    end
+    puts "TIME TOOK: #{time}"
+    assert_equal expected, result
   end
 end

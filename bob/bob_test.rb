@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative 'bob'
 
+# Bob = BobKotp
 class BobTest < Minitest::Test
   def test_stating_something
     remark = 'Tom-ay-to, tom-aaaah-to.'

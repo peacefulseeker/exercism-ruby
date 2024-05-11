@@ -24,8 +24,13 @@ colors[..1] == colors.take(2)  # take first 2 items from array
 \b # matches word boundaries
 \w # matches any word character
 \W # matches any non-word character
+\z # asserts position at the end of the string
 String.chr # returns the first character of a string
 String.upcase # returns the uppercase version of a string
+# =~ operator matches the regular expression against a string,
+/mi/ =~ "hi mike" # => 3
+"hi mike" =~ /mi/ # => 3
+
 
 String.reverse # Returns a new string with the characters from self in reverse order.
 String.reverse! # Returns self with its characters reversed (in-place)

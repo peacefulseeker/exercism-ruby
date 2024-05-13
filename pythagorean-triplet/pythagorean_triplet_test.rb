@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'pythagorean_triplet'
 
+# PythagoreanTriplet = PythagoreanTripletBigBob
+
 class PythagoreanTripletTest < Minitest::Test
   def test_triplets_whose_sum_is_12
     expected = [[3, 4, 5]]

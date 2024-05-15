@@ -46,6 +46,10 @@ String.tap
 # array:    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 # evens:    [2, 4, 6, 8, 10]
 # squares:  [4, 16, 36, 64, 100]
+
+# Squeezed" means that each multiple-character run of a selected
+# character is squeezed down to a single character; with no arguments
+"  now   is  the".squeeze(" ")         #=> " now is the"
 ```
 
 ### Console / irb

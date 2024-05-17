@@ -62,3 +62,14 @@ print # puts all args on same line, and "\n" needed
 ### Class
 ```shell
 Class.instance_methods(include_super=false) # will output user-defined methods
+
+
+### Parallelism & Concurrency
+Ruby process -> Main Thread -> N Threads
+Heap - where you store variables / consts / any data literlaly.
+Threads have access to same heap, which is quite convenient.
+
+Parallelism -> 200 people working on 200 tasks
+Concurrency -> 200 people working on 100 tasks(context switching for some of those)
+# join back with main thread, wait until going on
+# don't finish at the same order, each thread acts independently from each other(async)

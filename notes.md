@@ -50,6 +50,12 @@ String.tap
 # Squeezed" means that each multiple-character run of a selected
 # character is squeezed down to a single character; with no arguments
 "  now   is  the".squeeze(" ")         #=> " now is the"
+
+# In ruby/rust both of these will match ASCII + unicode chars, but no in java e.g.
+/\p{Alpha}/gu # matches any characters in the Alpha script extension(unicode inclusive)
+/\p{L}/gu # matches any kind of letter from any language(unicode inclusive)
+
+# Regex: https://en.wikipedia.org/wiki/Regular_expression#Character_classes
 ```
 
 ### Console / irb

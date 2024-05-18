@@ -12,7 +12,7 @@ class ParallelLetterFrequency
     threads = []
     @texts.each do |text|
       threads << Thread.new do
-        step = [text.length / 1000, 1].max
+        step = [text.length / 5, 1].max
         (0..text.length).step(step).each do |index|
           chunk = text[index..(index - 1) + step]
           process(chunk)
@@ -26,9 +26,8 @@ class ParallelLetterFrequency
   end
 
   def process(text)
-    text.each_char do |char|
-      char = char.downcase
-      @result[char] += 1 if char.match?(/[^\d\s\W]/) || char.match?(/[^\x00-\x7F—’]/)
+    text.downcase.each_char do |char|
+      @result[char] += 1 if char.match?(/\p{L}/)
     end
   end
 end

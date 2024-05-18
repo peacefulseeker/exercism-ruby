@@ -11,9 +11,9 @@ class ParallelLetterFrequency
   def count
     threads = []
     @texts.each do |text|
-      threads << Thread.new do
-        step = [text.length / 5, 1].max
-        (0..text.length).step(step).each do |index|
+      step = [text.length / 5, 1].max
+      (0..text.length).step(step).each do |index|
+        threads << Thread.new do
           chunk = text[index..(index - 1) + step]
           process(chunk)
         end

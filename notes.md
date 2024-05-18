@@ -79,3 +79,9 @@ Parallelism -> 200 people working on 200 tasks
 Concurrency -> 200 people working on 100 tasks(context switching for some of those)
 # join back with main thread, wait until going on
 # don't finish at the same order, each thread acts independently from each other(async)
+
+
+### Debugging
+require 'byebug'
+
+byebug

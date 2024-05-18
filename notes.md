@@ -85,3 +85,9 @@ Concurrency -> 200 people working on 100 tasks(context switching for some of tho
 require 'byebug'
 
 byebug
+
+
+TODO:
+- because of '—', '’' chars test debugging does not work. holy crap!!
+fckng bug, which should be addressed. Something might be with unicode chars??
+SAVING as unicode with BOM solved the issue.. holy crap

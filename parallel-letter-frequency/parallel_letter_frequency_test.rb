@@ -1,4 +1,4 @@
-require 'minitest/autorun'
+﻿require 'minitest/autorun'
 require_relative 'parallel_letter_frequency'
 
 # rubocop:disable Layout/SpaceInsideHashLiteralBraces

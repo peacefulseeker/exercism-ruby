@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+# require_relative 'allergies'
 require_relative 'allergies'
 
 class AllergiesTest < Minitest::Test

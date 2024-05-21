@@ -20,6 +20,8 @@ colors[..1] == colors.take(2)  # take first 2 items from array
 ```
 
 ### String & Regex
+https://en.wikipedia.org/wiki/Regular_expression#Character_classes
+
 ```ruby
 \b # matches word boundaries
 \w # matches any word character
@@ -55,7 +57,7 @@ String.tap
 /\p{Alpha}/gu # matches any characters in the Alpha script extension(unicode inclusive)
 /\p{L}/gu # matches any kind of letter from any language(unicode inclusive)
 
-# Regex: https://en.wikipedia.org/wiki/Regular_expression#Character_classes
+\1 # matches the same text as most recently matched by the 1st capturing group
 ```
 
 ### Console / irb

@@ -1,6 +1,9 @@
 require 'minitest/autorun'
 require_relative 'run_length_encoding'
 
+# RunLengthEncoding = RunLengthEncodingRegexp
+# RunLengthEncoding = RunLengthEncodingChunk
+
 class RunLengthEncodingTest < Minitest::Test
   def test_encode_empty_string
     input = ''

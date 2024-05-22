@@ -5,13 +5,13 @@ class ResistorColorTrio
     @colors_trio = colors_trio
   end
 
-  def value
-    @colors_trio.take(2).map { |color| COLORS.index(color) }.join
+  def first_two
+    @colors_trio.take(2).map { |color| COLORS.index(color) }.join.to_i
   end
 
   def ohms
-    zeros = '0' * COLORS.index(@colors_trio[-1])
-    (value + zeros).to_i
+    third = COLORS.index(@colors_trio[-1])
+    first_two * 10**third
   end
 
   def label

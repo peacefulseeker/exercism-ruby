@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'wordy'
 
+# WordProblem = WordProblemGchan
+
 class WordyTest < Minitest::Test
   def test_addition
     problem = WordProblem.new('What is 1 plus 1?')

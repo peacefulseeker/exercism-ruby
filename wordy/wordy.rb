@@ -1,9 +1,15 @@
 class WordProblem
-  OPERATIONS_TO_METHOD = {
-    "plus": '+',
-    "minus": '-',
-    "multiplied by": '*',
-    "divided by": '/'
+  class QuestionError < ArgumentError
+    def initialize(message = "I don't understand the question")
+      super
+    end
+  end
+
+  OPERATION_TO_METHOD = {
+    'plus' => :+,
+    'minus' => :-,
+    'multiplied' => :*,
+    'divided' => :/
   }.freeze
 
   def initialize(question)
@@ -13,21 +19,49 @@ class WordProblem
   def answer
     # -3 plus 7 multiplied by -2
     expression = @question.scan(/-?\d.+-?\d/).first
-    raise ArgumentError if expression.nil?
+    raise QuestionError if expression.nil?
 
-    # -3 + 7 * -2
-    OPERATIONS_TO_METHOD.each do |key, value|
-      expression.gsub!(/#{key}/, value)
+    # ["-3", "plus", "7", "multiplied" "-2"]
+    # TODO: get rid of that reject by constructing a bit more complex regex
+    symbols = expression.split(/\s+/).reject { |i| i == 'by' }
+
+    first = symbols[0].to_i
+    symbols[1..].each_slice(2).inject(first) do |sum, (op, a)|
+      operation = OPERATION_TO_METHOD[op]
+      sum.send(operation, a.to_i)
     end
+  end
+end
 
-    # ["-3", "+", "7", "*" "-2"]
-    symbols = expression.split(/\s+/)
+# https://exercism.org/tracks/ruby/exercises/wordy/solutions/gchan
+# smart to combine numvers and operations
+# with unshifting + in front
+class WordProblemGchan
+  attr_reader :question
 
-    result = symbols[0].to_i # -3
-    symbols[1..].each_slice(2) do |op, a|
-      result = result.send(op.to_sym, a.to_i)
+  OPERATIONS = {
+    'plus' => :+,
+    'minus' => :-,
+    'divided' => :/,
+    'multiplied' => :*
+  }
+
+  def initialize(question)
+    @question = question
+  end
+
+  def answer
+    numbers = question.scan(/(-?\d+)/).flatten.map(&:to_i)
+
+    operations = question.scan(/(plus|minus|multiplied|divided)/).flatten
+                         .map { |op| OPERATIONS[op] }
+
+    raise ArgumentError if numbers.empty? || operations.empty?
+
+    equation = operations.unshift(:+).zip(numbers).flatten.compact
+
+    equation.each_slice(2).inject(0) do |sum, (operation, number)|
+      sum.send(operation, number)
     end
-
-    result
   end
 end

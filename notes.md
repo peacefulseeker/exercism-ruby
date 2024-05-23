@@ -7,7 +7,7 @@
 ### Array/Hash
 ```ruby
 colors[..1] == colors.take(2)  # take first 2 items from array
-
+Array.unshift # puts element in front (that's O^n operation)
 
 # to strings
 %w[foo bar baz] # => ["foo", "bar", "baz"]
@@ -92,4 +92,4 @@ byebug
 TODO:
 - because of '—', '’' chars test debugging does not work. holy crap!!
 fckng bug, which should be addressed. Something might be with unicode chars??
-SAVING as unicode with BOM solved the issue.. holy crap
+SAVING as unicode with BOM solved the issue.. holy moly

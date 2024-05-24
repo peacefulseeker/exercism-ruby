@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative 'atbash_cipher'
 
+# Atbash = AtbashScan
 class AtbashCipherTest < Minitest::Test
   def test_encode_yes
     plaintext = 'yes'

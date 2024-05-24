@@ -24,14 +24,24 @@ https://en.wikipedia.org/wiki/Regular_expression#Character_classes
 
 ```ruby
 \b # matches word boundaries
-\w # matches any word character
-\W # matches any non-word character
+\w # matches any word character(including digits)
+\W # matches any non-word character(excluding digits)
 \z # asserts position at the end of the string
 String.chr # returns the first character of a string
 String.upcase # returns the uppercase version of a string
 # =~ operator matches the regular expression against a string,
 /mi/ =~ "hi mike" # => 3
 "hi mike" =~ /mi/ # => 3
+
+String.tr
+# Negation
+'hello'.tr('^aeiou', '-') # => "-e--o"
+# Ranges.
+'ibm'.tr('b-z', 'a-z') # => "hal"
+# Escapes.
+'hel^lo'.tr('\^aeiou', '-')     # => "h-l-l-"    # Escaped leading caret.
+'i-b-m'.tr('b\-z', 'a-z')       # => "ibabm"     # Escaped embedded hyphen.
+'foo\\bar'.tr('ab\\', 'XYZ')    # => "fooZYXr"   # Escaped backslash.
 
 
 String.reverse # Returns a new string with the characters from self in reverse order.

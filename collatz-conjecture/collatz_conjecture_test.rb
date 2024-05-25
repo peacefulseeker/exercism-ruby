@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'collatz_conjecture'
 
+# CollatzConjecture = CollatzConjectureNonRecursive
+
 class CollatzConjectureTest < Minitest::Test
   def test_zero_steps_for_one
     assert_equal 0, CollatzConjecture.steps(1)

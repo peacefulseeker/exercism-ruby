@@ -17,6 +17,9 @@ Array.unshift # puts element in front (that's O^n operation)
 %i[1 % *]       # => [:"1", :%, :*]
 
 [".", nil, "s", nil].compact # => [".", "s"]
+
+[1,2,3].pop # => 3, removes and returns trailing element from array
+
 ```
 
 ### String & Regex

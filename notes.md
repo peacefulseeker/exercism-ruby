@@ -20,6 +20,9 @@ Array.unshift # puts element in front (that's O^n operation)
 
 [1,2,3].pop # => 3, removes and returns trailing element from array
 
+# is there any element in array which has no reminder from division of 5
+# _1 -> first position argument passed, <element> in this case
+[5, 2, 1].any? { (5 % _1).zero? }
 ```
 
 ### String & Regex

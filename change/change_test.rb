@@ -1,5 +1,8 @@
 require 'minitest/autorun'
-require_relative 'change'
+# require_relative 'change'
+require_relative 'change_others'
+
+Change = ChangeAlternates
 
 class ChangeTest < Minitest::Test
   def test_change_for_1_cent

@@ -1,6 +1,9 @@
 require 'minitest/autorun'
 require_relative 'matching_brackets'
 
+# Brackets = BracketsJhass
+# Brackets = BracketsGitKeeper
+
 class MatchingBracketsTest < Minitest::Test
   def test_paired_square_brackets
     assert Brackets.paired?('[]')

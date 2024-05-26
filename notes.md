@@ -4,7 +4,7 @@
 1...5 # => 1...5 (Exclusive)
 ```
 
-### Array/Hash
+### Array
 ```ruby
 colors[..1] == colors.take(2)  # take first 2 items from array
 Array.unshift # puts element in front (that's O^n operation)
@@ -18,11 +18,17 @@ Array.unshift # puts element in front (that's O^n operation)
 
 [".", nil, "s", nil].compact # => [".", "s"]
 
-[1,2,3].pop # => 3, removes and returns trailing element from array
+[1,2,3].pop # => 3, removes and returns trailing element from array in-place
 
 # is there any element in array which has no reminder from division of 5
 # _1 -> first position argument passed, <element> in this case
 [5, 2, 1].any? { (5 % _1).zero? }
+```
+
+### Hash
+```ruby
+
+Hash.key # Returns the key for the first-found entry with the given value OR nil
 ```
 
 ### String & Regex

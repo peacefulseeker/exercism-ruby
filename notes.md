@@ -31,20 +31,8 @@ Array.unshift # puts element in front (that's O^n operation)
 Hash.key # Returns the key for the first-found entry with the given value OR nil
 ```
 
-### String & Regex
-https://en.wikipedia.org/wiki/Regular_expression#Character_classes
-
+### String
 ```ruby
-\b # matches word boundaries
-\w # matches any word character(including digits)
-\W # matches any non-word character(excluding digits)
-\z # asserts position at the end of the string
-String.chr # returns the first character of a string
-String.upcase # returns the uppercase version of a string
-# =~ operator matches the regular expression against a string,
-/mi/ =~ "hi mike" # => 3
-"hi mike" =~ /mi/ # => 3
-
 String.tr
 # Negation
 'hello'.tr('^aeiou', '-') # => "-e--o"
@@ -74,6 +62,23 @@ String.tap
 # Squeezed" means that each multiple-character run of a selected
 # character is squeezed down to a single character; with no arguments
 "  now   is  the".squeeze(" ")         #=> " now is the"
+
+"".to_i == 0  # true
+
+```
+### Regex
+https://en.wikipedia.org/wiki/Regular_expression#Character_classes
+
+```ruby
+\b # matches word boundaries
+\w # matches any word character(including digits)
+\W # matches any non-word character(excluding digits)
+\z # asserts position at the end of the string
+String.chr # returns the first character of a string
+String.upcase # returns the uppercase version of a string
+# =~ operator matches the regular expression against a string,
+/mi/ =~ "hi mike" # => 3
+"hi mike" =~ /mi/ # => 3
 
 # In ruby/rust both of these will match ASCII + unicode chars, but no in java e.g.
 /\p{Alpha}/gu # matches any characters in the Alpha script extension(unicode inclusive)

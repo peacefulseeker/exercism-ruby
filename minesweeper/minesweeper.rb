@@ -5,35 +5,46 @@ class Minesweeper
     new(input).annotate
   end
 
-  attr_reader :field
+  attr_reader :field, :num_rows
 
   def initialize(input)
-    @field = input.map { |i| i.split('').map { |i_| i_ == MINE ? i_ : 0 } }
+    @field = input.map(&:chars)
+    @num_rows = @field.count
+    # @num_cells = @field&.first&.count
+  end
+
+  def increment_cell(row_i, cell_i)
+    cell = field[row_i][cell_i].to_i
+
+    cell += 1 if cell_i - 1 >= 0 && field[row_i][cell_i - 1] == MINE
+    cell += 1 if field[row_i][cell_i + 1] == MINE
+
+    upper_row = row_i - 1
+    if upper_row >= 0
+      cell += 1 if field[upper_row][cell_i] == MINE
+      cell += 1 if cell_i - 1 >= 0 && field[upper_row][cell_i - 1] == MINE
+      cell += 1 if field[upper_row][cell_i + 1] == MINE
+    end
+
+    lower_row = row_i + 1
+    if lower_row <= num_rows - 1
+      cell += 1 if field[lower_row][cell_i] == MINE
+      cell += 1 if cell_i - 1 >= 0 && field[lower_row][cell_i - 1] == MINE
+      cell += 1 if field[lower_row][cell_i + 1] == MINE
+    end
+
+    return unless cell.positive?
+
+    field[row_i][cell_i] = cell
   end
 
   def annotate
-    field.map.with_index do |row, row_i|
-      row.map.with_index do |cell, cell_i|
-        next cell if cell == MINE
-
-        cell += 1 if cell_i - 1 >= 0 && row[cell_i - 1] == MINE
-        cell += 1 if row[cell_i + 1] == MINE
-
-        upper_row = row_i - 1
-        if upper_row >= 0
-          cell += 1 if cell_i - 1 >= 0 && field[upper_row][cell_i - 1] == MINE
-          cell += 1 if field[upper_row][cell_i] == MINE
-          cell += 1 if field[upper_row][cell_i + 1] == MINE
-        end
-        lower_row = row_i + 1
-        if lower_row <= field.length - 1
-          cell += 1 if cell_i - 1 >= 0 && field[lower_row][cell_i - 1] == MINE
-          cell += 1 if field[lower_row][cell_i] == MINE
-          cell += 1 if field[lower_row][cell_i + 1] == MINE
-        end
-
-        cell.zero? ? ' ' : cell
-      end.join
+    field.each.with_index do |row, row_i|
+      row.each.with_index do |cell, cell_i|
+        increment_cell(row_i, cell_i) if cell != MINE
+      end
     end
+
+    field.map(&:join)
   end
 end

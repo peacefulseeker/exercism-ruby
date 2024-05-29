@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'isbn_verifier'
 
+# IsbnVerifier = IsbnVerifierReduce
+
 class IsbnVerifierTest < Minitest::Test
   def test_valid_isbn
     string = '3-598-21508-8'

@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'microwave'
 
+# Microwave = MicrowaveTime
+
 class MicrowaveTest < Minitest::Test
   def test_one_second
     assert_equal '00:01', Microwave.new(1).timer

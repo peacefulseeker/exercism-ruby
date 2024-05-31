@@ -33,3 +33,17 @@ class Microwave
     format('%<minutes>02d:%<seconds>02d', minutes: minutes + minutes_overflow, seconds:)
   end
 end
+
+# https://exercism.org/tracks/ruby/exercises/microwave/solutions/emlozin
+# smart minutes / seconds extraction + Time.at constructor leveraging
+class MicrowaveTime
+  def initialize(time)
+    seconds = time % 100
+    minutes = time / 100 * 60
+    @time = Time.at(seconds + minutes).utc
+  end
+
+  def timer
+    @time.strftime('%M:%S')
+  end
+end

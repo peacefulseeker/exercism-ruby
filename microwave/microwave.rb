@@ -13,7 +13,7 @@ class Microwave
     [minutes, seconds]
   end
 
-  def timer
+  def timer_
     digits = time.to_s.chars
     if digits.count == 3
       minutes, seconds = get_minutes_and_seconds(digits[0].to_i, digits[1..].join.to_i)
@@ -24,5 +24,12 @@ class Microwave
       seconds = time % 60
     end
     format('%<minutes>02d:%<seconds>02d', minutes:, seconds:)
+  end
+
+  # https://exercism.org/tracks/ruby/exercises/microwave/solutions/valloskut
+  def timer
+    minutes, seconds = time.divmod(100)
+    minutes_overflow, seconds = seconds.divmod(60)
+    format('%<minutes>02d:%<seconds>02d', minutes: minutes + minutes_overflow, seconds:)
   end
 end

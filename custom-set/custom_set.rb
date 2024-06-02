@@ -1,6 +1,6 @@
 class CustomSet
   def initialize(array = [])
-    @set = array.uniq.sort
+    @set = array.uniq
   end
 
   def to_s
@@ -8,11 +8,11 @@ class CustomSet
   end
 
   def ==(other)
-    self.class == other.class && set == other.to_s
+    other.class == self.class && set.sort == other.to_s.sort
   end
 
   def add(element)
-    self.class.new(set + [element])
+    self.class.new(set << element)
   end
 
   def empty?
@@ -24,21 +24,19 @@ class CustomSet
   end
 
   def subset?(other)
-    set.all? { |element| other.member? element }
+    difference(other).empty?
   end
 
   def disjoint?(other)
-    set.none? { |element| other.member? element }
+    intersection(other).empty?
   end
 
   def intersection(other)
-    match = set.filter { |element| other.member? element }
-    self.class.new(match)
+    self.class.new(set & other.to_s)
   end
 
   def -(other)
-    diff = set.filter { |element| !other.member? element }
-    self.class.new(diff)
+    self.class.new(set - other.to_s)
   end
 
   def +(other)

@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'crypto_square'
 
+# Crypto = CryptoCrouzet
+
 class CryptoSquareTest < Minitest::Test
   def test_empty_plaintext_results_in_an_empty_ciphertext
     plaintext = ''

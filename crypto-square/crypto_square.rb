@@ -8,20 +8,35 @@ class Crypto
     row_length = 1
     row_length += 1 until row_length**2 >= @message.length
 
-    # get text chunks of row_length
-    result = []
-    crypted = @message
-              .scan(/.{1,#{row_length}}/)
-              .map { |row| format("%-#{row_length}s", row) }
+    @message
+      .scan(/.{1,#{row_length}}/)
+      .map { |row| format("%-#{row_length}s", row).chars }
+      .transpose
+      .map(&:join)
+      .join(' ')
+  end
+end
 
-    # transpose each row chunks
-    crypted.each do |row|
-      row.each_char.with_index do |char, i|
-        result[i] = format('%s', result[i]) # first need to handle nil case and format as ''
-        result[i] += char
-      end
-    end
+# https://exercism.org/tracks/ruby/exercises/crypto-square/solutions/CROUZET
+# looks quite elegant!
 
-    result.join(' ')
+class CryptoCrouzet
+  attr_reader :normalized_text, :size
+
+  def initialize(plaintext)
+    @normalized_text = plaintext.downcase.scan(/[[:alnum:]]/).join
+    @size = Math.sqrt(normalized_text.length).ceil
+  end
+
+  def ciphertext
+    return '' unless size.positive?
+
+    normalized_text
+      .chars
+      .each_slice(size)
+      .map { |slice| slice.join.ljust(size).chars }
+      .transpose
+      .map(&:join)
+      .join(' ')
   end
 end

@@ -85,6 +85,8 @@ String.upcase # returns the uppercase version of a string
 /\p{L}/gu # matches any kind of letter from any language(unicode inclusive)
 
 \1 # matches the same text as most recently matched by the 1st capturing group
+
+String.scan(/[[:alnum:]]/) # matches alpha numeric chars only
 ```
 
 ### Console / irb

@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'protein_translation'
 
+# Translation = TranslationWithLookup
+
 class ProteinTranslationTest < Minitest::Test
   def test_empty_rna_sequence_results_in_no_proteins
     strand = ''

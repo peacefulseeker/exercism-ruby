@@ -1,5 +1,8 @@
 require 'minitest/autorun'
 require_relative 'meetup'
+# require_relative 'meetup_crouzet'
+# require_relative 'meetup_jlcrochet'
+# require_relative 'meetup_dkinzer'
 
 class MeetupTest < Minitest::Test
   def test_when_teenth_monday_is_the_13th_the_first_day_of_the_teenth_week

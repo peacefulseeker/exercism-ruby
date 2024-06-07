@@ -8,6 +8,7 @@ class Meetup
     fourth: 3,
     last: -1
   }.freeze
+  TEENTH_DAY_RANGE = (13..19)
 
   def initialize(month, year)
     @month = month
@@ -15,20 +16,22 @@ class Meetup
   end
 
   def day(day_of_week, schedule)
+    dates = dates(day_of_week)
     case schedule
     when :teenth
-      (13..19).each do |i|
-        date = Date.new(@year, @month, i)
-        return date if date.send("#{day_of_week}?")
-      end
+      dates.find { |date| TEENTH_DAY_RANGE.include?(date.day) }
     else
-      date = Date.new(@year, @month, 1)
-      days_in_month = (date.next_month - 1).day
-      weekdays = (1..days_in_month).select do |i|
-        Date.new(@year, @month, i).send("#{day_of_week}?")
-      end
-      day = weekdays[SCHEDULE_TO_INDEX[schedule]]
-      Date.new(@year, @month, day)
+      dates[SCHEDULE_TO_INDEX[schedule]]
     end
+  end
+
+  def dates(day_of_week)
+    1.upto(days_in_month)
+     .map { |day| Date.new(@year, @month, day) }
+     .select { |date| date.send("#{day_of_week}?") }
+  end
+
+  def days_in_month
+    Date.new(@year, @month, -1).day
   end
 end

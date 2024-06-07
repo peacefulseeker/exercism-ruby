@@ -1,7 +1,13 @@
+### Dates
+```ruby
+Date.today.strftime('%A') # weekday, e.g. Wednesday or Thursday
+```
+
 ### Ranges
 ```ruby
 1..5  # => 1..5(inclusive)
 1...5 # => 1...5 (Exclusive)
+(1..5).include?(5) == (1..5).cover?(5)
 ```
 
 ### Array

@@ -1,6 +1,9 @@
 require 'minitest/autorun'
 require_relative 'darts'
 
+# Darts = DartsMath
+# Darts = DartsStruct
+
 class DartsTest < Minitest::Test
   def test_missed_target
     darts = Darts.new(-9, 9)

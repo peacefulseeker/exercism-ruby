@@ -1,43 +1,47 @@
-class FoodChain
-  VERSE_I_KNOW = "I know an old lady who swallowed a %<animal>s.\n".freeze
-  VERSE_SHE_SWALLOWED = "She swallowed the %<animal1>s to catch the %<animal2>s.\n".freeze
-  VERSE_SHE_SWALLOWED_THE_BIRD =
-    "She swallowed the bird to catch the spider that wriggled and jiggled and tickled inside her.\n".freeze
+require 'ostruct'
+class Creature < OpenStruct; end
 
-  ANIMAL_PHRASES = {
-    fly: "I don't know why she swallowed the fly. Perhaps she'll die.\n",
-    spider: "It wriggled and jiggled and tickled inside her.\n",
-    bird: "How absurd to swallow a bird!\n",
-    cat: "Imagine that, to swallow a cat!\n",
-    dog: "What a hog, to swallow a dog!\n",
-    goat: "Just opened her throat and swallowed a goat!\n",
-    cow: "I don\'t know how she swallowed a cow!\n",
-    horse: "She's dead, of course!\n"
-  }.freeze
+class FoodChain
+  VERSE_I_KNOW = "I know an old lady who swallowed a %<creature>s.\n".freeze
+  VERSE_SHE_SWALLOWED = "She swallowed the %<predator>s to catch the %<prey_description>s.\n".freeze
+
+  CREATURES = [
+    Creature.new(name: 'fly', intro: "I don't know why she swallowed the fly. Perhaps she'll die.\n"),
+    Creature.new(name: 'spider', intro: "It wriggled and jiggled and tickled inside her.\n",
+                 extra: ' that wriggled and jiggled and tickled inside her'),
+    Creature.new(name: 'bird', intro: "How absurd to swallow a bird!\n"),
+    Creature.new(name: 'cat', intro: "Imagine that, to swallow a cat!\n"),
+    Creature.new(name: 'dog', intro: "What a hog, to swallow a dog!\n"),
+    Creature.new(name: 'goat', intro: "Just opened her throat and swallowed a goat!\n"),
+    Creature.new(name: 'cow', intro: "I don\'t know how she swallowed a cow!\n"),
+    Creature.new(name: 'horse', intro: "She's dead, of course!\n")
+  ].freeze
 
   def self.song
     new.song
   end
 
   def song
-    ANIMAL_PHRASES.map.with_index { |(animal, phrase), index| verse(animal, phrase, index) }.join("\n")
+    CREATURES.map.with_index { |creature, index| verse(creature, index) }.join("\n")
   end
 
-  def verse(animal, phrase, index)
-    verse = format(VERSE_I_KNOW, animal:) + phrase
-    verse += verses_up_to_animal(index) unless %i[fly horse].include?(animal)
+  def verse(creature, index)
+    verse = format(VERSE_I_KNOW, creature: creature.name) + creature.intro
+    verse += verses_up_to_animal(index) unless first_or_last_verse(creature.name)
     verse
   end
 
+  def first_or_last_verse(name)
+    CREATURES.first.name == name || CREATURES.last.name == name
+  end
+
   def verses_up_to_animal(index)
-    verses = ANIMAL_PHRASES.keys[..index].reverse.each_cons(2).map do |animal1, animal2|
-      if animal1 == :bird
-        VERSE_SHE_SWALLOWED_THE_BIRD
-      else
-        format(VERSE_SHE_SWALLOWED, animal1:, animal2:)
-      end
+    verses = CREATURES[..index].reverse.each_cons(2).map do |predator, prey|
+      prey_description = [prey.name, prey.extra].compact.join
+      format(VERSE_SHE_SWALLOWED, predator: predator.name, prey_description:)
     end
 
-    verses.join + ANIMAL_PHRASES[:fly]
+    verses << CREATURES.first.intro
+    verses.join
   end
 end

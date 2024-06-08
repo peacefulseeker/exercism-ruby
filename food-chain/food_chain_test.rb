@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 
 require_relative 'food_chain'
+# require_relative 'food_chain_jchunky'
 
 class NoCheating < IOError
   def message

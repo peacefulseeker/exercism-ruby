@@ -15,6 +15,17 @@ Date.today.strftime('%A') # weekday, e.g. Wednesday or Thursday
 colors[..1] == colors.take(2)  # take first 2 items from array
 Array.unshift # puts element in front (that's O^n operation)
 
+# perform extra manipulation for filtered items before returning
+(0..9).filter_map {|i| i * 2 if i.even? } # [0, 4, 8, 12, 16]
+# comparing to default filtering with original items filtered by criteria.
+(0..9).filter {|i| i * 2 if i.even? } # 0, 2, 4, 6, 8]
+
+# with no block given, returns original array as is.
+[[0, 1], [0, 2]].flat_map # [[0, 1], [0, 2]]
+# _1 here is a reference to elem
+[[0, 1], [0, 2]].flat_map { _1 } # [0, 1, 0, 2]
+# [[0, 1], [0, 2]].flat_map { |e| e } # [0, 1, 0, 2]
+
 # to strings
 %w[foo bar baz] # => ["foo", "bar", "baz"]
 %w[1 % *]       # => ["1", "%", "*"]

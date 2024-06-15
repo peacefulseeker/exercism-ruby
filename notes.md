@@ -10,6 +10,13 @@ Date.today.strftime('%A') # weekday, e.g. Wednesday or Thursday
 (1..5).include?(5) == (1..5).cover?(5)
 ```
 
+### Integer
+```ruby
+10.downto(5).to_a # [10, 9, 8, 7, 6, 5]
+5.upto(10).to_a # [5, 6, 7, 8, 9, 10]
+
+```
+
 ### Array
 ```ruby
 colors[..1] == colors.take(2)  # take first 2 items from array

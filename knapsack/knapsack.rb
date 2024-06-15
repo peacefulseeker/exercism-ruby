@@ -21,3 +21,28 @@ class Knapsack
     combination.sum(&:value) if combination.sum(&:weight) <= @max_weight
   end
 end
+
+# TODO: not really grasped the idea. would need to spend more time
+# on dynamic programming with memoization topic.
+class KnapsackDynamic
+  def initialize(max_weight)
+    @max_weight = max_weight
+  end
+
+  def max_value(items)
+    # e.g. max_values[3] is the maximum value so far for a maximum weight of 3.
+    # create array with max_weight + 1 elements, filled with 0
+    max_values = Array.new(@max_weight + 1, 0)
+
+    items.each do |item|
+      @max_weight.downto(item.weight) do |weight|
+        value_with_item = max_values[weight - item.weight] + item.value
+
+        # Include `item` only if doing so would increase the maximum value for this weight.
+        max_values[weight] = [max_values[weight], value_with_item].max
+      end
+    end
+
+    max_values[@max_weight]
+  end
+end

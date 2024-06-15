@@ -1,6 +1,8 @@
 require 'minitest/autorun'
 require_relative 'knapsack'
 
+# Knapsack = KnapsackDynamic
+
 if RUBY_VERSION < '3.2.0'
   class Data
     def self.define(*attributes)

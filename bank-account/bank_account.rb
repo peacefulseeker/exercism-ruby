@@ -7,7 +7,7 @@ class BankAccount
   def open
     raise ArgumentError, "You can't open an already open account" if opened?
 
-    @state = :open
+    @state = :opened
   end
 
   def close
@@ -41,7 +41,7 @@ class BankAccount
   private
 
   def opened?
-    @state == :open
+    @state == :opened
   end
 
   def closed?

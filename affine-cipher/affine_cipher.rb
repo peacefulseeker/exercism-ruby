@@ -8,10 +8,10 @@ class Affine
 
     raise ArgumentError, 'a and m must be coprime' unless @a.gcd(@m) == 1
 
-    @mode_inverse ||= mod_inverse
+    @mmi ||= mod_inverse
   end
 
-  attr_reader :mode_inverse
+  attr_reader :mmi
 
   def encode(plaintext)
     normalized(plaintext)
@@ -47,12 +47,11 @@ class Affine
     return char if char =~ /\d/
 
     y = ALPHA.index(char)
-    new_index = mode_inverse * (y - @b) % @m
+    new_index = mmi * (y - @b) % @m
     ALPHA[new_index]
   end
 
   def mod_inverse
-    x = 1
     x += 1 until (x * @a) % @m == 1
     x
   end

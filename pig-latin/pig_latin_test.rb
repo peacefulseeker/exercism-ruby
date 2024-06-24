@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require_relative 'pig_latin'
+# require_relative 'pig_latin_erik'
 
 class PigLatinTest < Minitest::Test
   def test_word_beginning_with_a

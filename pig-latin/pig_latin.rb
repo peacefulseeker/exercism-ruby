@@ -1,10 +1,9 @@
 class PigLatin
   VOWELS = %w[a e i o u].freeze
-  CONSONANTS = ('a'..'z').to_a - VOWELS
-  RULE_4 = /^(?<consonants>[#{CONSONANTS}]+)(?<named>y)/
-  RULE_3 = /^[#{CONSONANTS}]*qu/
   RULE_1 = /[#{VOWELS}]|xr|yt/
-  RULE_2 = /^[#{CONSONANTS}]+/
+  RULE_2 = /\A[^#{VOWELS}]+/
+  RULE_3 = /\A[^#{VOWELS}]*qu/
+  RULE_4 = /\A[^#{VOWELS}]+(?=y)/
 
   def self.translate(phrase)
     pl = PigLatin.new
@@ -14,30 +13,29 @@ class PigLatin
   def translate(word)
     return apply_rule_four(word) if word.start_with?(RULE_4)
     return apply_rule_three(word) if word.start_with?(RULE_3)
-    return apply_rule_one(word) if word.start_with?(RULE_1)
+    return add_ay(word) if word.start_with?(RULE_1)
 
-    apply_rule_two(word) if word.start_with?(RULE_2)
+    apply_rule_two(word)
   end
 
   private
 
-  def apply_rule_one(word)
+  def add_ay(word)
     "#{word}ay"
   end
 
   def apply_rule_two(word)
     consonants = word.gsub!(RULE_2).to_a.join
-    "#{word}#{consonants}ay"
+    add_ay("#{word}#{consonants}")
   end
 
   def apply_rule_three(word)
     consonants = word.gsub!(RULE_3).to_a.join
-    "#{word}#{consonants}ay"
+    add_ay("#{word}#{consonants}")
   end
 
   def apply_rule_four(word)
-    consonants, y = word.match(RULE_4).captures
-    word = word.sub(consonants + y, '')
-    "#{y}#{word}#{consonants}ay"
+    consonants = word.gsub!(RULE_4).to_a.join
+    add_ay("#{word}#{consonants}")
   end
 end

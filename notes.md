@@ -3,6 +3,7 @@
 Date.today.strftime('%A') # weekday, e.g. Wednesday or Thursday
 ```
 
+
 ### Ranges
 ```ruby
 1..5  # => 1..5(inclusive)
@@ -15,6 +16,9 @@ Date.today.strftime('%A') # weekday, e.g. Wednesday or Thursday
 10.downto(5).to_a # [10, 9, 8, 7, 6, 5]
 5.upto(10).to_a # [5, 6, 7, 8, 9, 10]
 
+# Any integer/float in 0 power will be equal to 1
+# Reminder: any number to the zero power is 1.
+rand ** 0 == 1
 ```
 
 ### Array

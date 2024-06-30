@@ -7,36 +7,26 @@ class BaseConverter
   def convert(input_base, digits, output_base)
     raise ArgumentError if input_base < 2 || output_base < 2 || digits.any?(&:negative?)
     raise ArgumentError if digits.any? { |d| d >= input_base }
+    return [0] unless digits.any?(&:positive?)
 
-    if input_base == 10
-      from_base_ten(digits, output_base)
-    elsif output_base == 10
-      to_base_ten(input_base, digits)
-    else
-      from_base_ten(to_base_ten(input_base, digits), output_base)
-    end
+    from_decimal(to_decimal(input_base, digits), output_base)
   end
 
-  def to_base_ten(input_base, digits)
-    converted = digits.map.with_index { |d, index| d * input_base**(digits.length - index - 1) }.inject(0, :+)
-    converted.to_s.split('').map(&:to_i)
+  def to_decimal(from_base, digits)
+    [digits.map.with_index { |d, index| d * from_base**(digits.length - index - 1) }.inject(0, :+)]
   end
 
-  def from_base_ten(digits, output_base)
-    reminder = digits.join.to_i
+  def from_decimal(digits, to_base)
+    remainder = digits.join.to_i
     power = 0
     powers = []
-    numbers = []
-    while output_base**power <= reminder
-      powers.push(output_base**power)
+    while to_base**power <= remainder
+      powers.push(to_base**power)
       power += 1
     end
-    return [0] if powers.empty?
-
-    powers.reverse.each do |p|
-      numbers.push(reminder / p)
-      reminder %= p
+    powers.reverse.each.with_object([]) do |pow, numbers|
+      numbers.push(remainder / pow)
+      remainder %= pow
     end
-    numbers
   end
 end

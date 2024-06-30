@@ -19,6 +19,13 @@ Date.today.strftime('%A') # weekday, e.g. Wednesday or Thursday
 # Any integer/float in 0 power will be equal to 1
 # Reminder: any number to the zero power is 1.
 rand ** 0 == 1
+
+# placing 0b in front of digits will interpret those as binaries
+0b00001 #
+0b00010 # 2
+0b00100 # 4
+0b01000 # 8
+0b10000 # 16
 ```
 
 ### Array

@@ -1,6 +1,10 @@
 require 'minitest/autorun'
 require_relative 'secret_handshake'
 
+# SecretHandshake = SecretHandshakeJIAZHEN
+# SecretHandshake = SecretHandshakeHenrik
+# SecretHandshake = SecretHandshakeCopious
+
 class SecretHandshakeTest < Minitest::Test
   def test_handshake_1_to_wink
     handshake = SecretHandshake.new(1)

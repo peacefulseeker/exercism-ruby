@@ -1,7 +1,7 @@
 # with guidance in https://germanna.edu/sites/default/files/2022-03/Change%20of%20Number%20Bases.pdf
 class BaseConverter
-  def self.convert(input_base, digits, output_base)
-    new.convert(input_base, digits, output_base)
+  def self.convert(*args)
+    BaseConverter.new.convert(*args)
   end
 
   def convert(input_base, digits, output_base)
@@ -13,6 +13,8 @@ class BaseConverter
   end
 
   def to_decimal(from_base, digits)
+    # https://exercism.org/tracks/ruby/exercises/all-your-base/solutions/ajoshguy
+    # [digits.reverse.map.with_index { |digit, i| digit * (from_base**i) }.sum]
     [digits.map.with_index { |d, index| d * from_base**(digits.length - index - 1) }.inject(0, :+)]
   end
 
@@ -25,8 +27,8 @@ class BaseConverter
       power += 1
     end
     powers.reverse.each.with_object([]) do |pow, numbers|
-      numbers.push(remainder / pow)
-      remainder %= pow
+      number, remainder = remainder.divmod(pow)
+      numbers.push(number)
     end
   end
 end

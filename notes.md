@@ -78,6 +78,10 @@ String.tr
 'i-b-m'.tr('b\-z', 'a-z')       # => "ibabm"     # Escaped embedded hyphen.
 'foo\\bar'.tr('ab\\', 'XYZ')    # => "fooZYXr"   # Escaped backslash.
 
+# Remove possible trailing char OR last char if exists
+String.chop
+"abc\r\n".chop      # => "abc"
+'abcd'.chop     # => "abc"
 
 String.reverse # Returns a new string with the characters from self in reverse order.
 String.reverse! # Returns self with its characters reversed (in-place)

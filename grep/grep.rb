@@ -12,8 +12,8 @@ class Grep
   end
 
   def grep
-    files.map.with_object(Set.new) do |file, matched_lines|
-      File.read(file).lines.map(&:rstrip).each_with_index do |line, index|
+    files.each_with_object(Set.new) do |file, matched_lines|
+      File.readlines(file).map(&:chop).each.with_index(1) do |line, index|
         matches = line_matches(line)
 
         next unless (matches && !flags.invert) || (flags.invert && !matches)
@@ -21,7 +21,7 @@ class Grep
 
         matched_lines << [
           ("#{file}:" unless single_file),
-          ("#{index.succ}:" if flags.prepend_line_number),
+          ("#{index}:" if flags.prepend_line_number),
           line
         ].join
       end

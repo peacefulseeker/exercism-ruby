@@ -1,49 +1,51 @@
 class Grep
-  def self.grep(*args)
-    Grep.new(*args).grep
-  end
-
   def initialize(pattern, flags, files)
     @flags = Flags.new(flags)
-    @is_single_flag = flags.size == 1
-    @multiple_files = files.size > 1
+    @single_flag = flags.size == 1
+    @single_file = files.one?
     @pattern = pattern
     @files = files
   end
 
+  def self.grep(*args)
+    Grep.new(*args).grep
+  end
+
   def grep
     files.map.with_object(Set.new) do |file, matched_lines|
-      lines_with_number = File.read(file).lines.map.with_index { |line, index| [line.strip, index + 1] }
-      lines_with_number.each do |line, number|
-        matches_exact_line = line == pattern
+      File.read(file).lines.map(&:rstrip).each_with_index do |line, index|
+        matches = line_matches(line)
 
-        if is_single_flag && flags.full_line_match
-          matches = matches_exact_line
-        else
-          matches = line.match?(/#{pattern}/)
-          if flags.case_insensitive
-            matches = line.downcase.match?(/#{pattern.downcase}/) || matches
-          elsif flags.full_line_match
-            matches = matches_exact_line || matches
-          end
-        end
-        will_add_line = (flags.invert && !matches) || (!flags.invert && matches)
-        next unless will_add_line
+        next unless (matches && !flags.invert) || (flags.invert && !matches)
+        break matched_lines << file if flags.file_names_only
 
-        if flags.file_names_only
-          line = file
-        else
-          line = "#{number}:#{line}" if flags.prepend_line_number
-          line = "#{file}:#{line}" if multiple_files
-        end
-        matched_lines.add(line)
+        matched_lines << [
+          ("#{file}:" unless single_file),
+          ("#{index.succ}:" if flags.prepend_line_number),
+          line
+        ].join
       end
     end.join("\n")
   end
 
   private
 
-  attr_reader :flags, :is_single_flag, :pattern, :files, :multiple_files
+  def line_matches(line)
+    if single_flag && flags.full_line_match
+      matches = line == pattern
+    else
+      matches = line.match?(/#{pattern}/)
+      if flags.case_insensitive
+        matches = line.downcase.match?(/#{pattern.downcase}/) || matches
+      elsif flags.full_line_match
+        matches = line == pattern || matches
+      end
+    end
+
+    matches
+  end
+
+  attr_reader :flags, :single_flag, :pattern, :files, :single_file
 end
 
 class Flags

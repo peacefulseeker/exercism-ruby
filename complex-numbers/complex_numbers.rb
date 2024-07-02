@@ -7,8 +7,7 @@ class ComplexNumber
   attr_accessor :real, :imaginary
 
   def ==(other)
-    # @real == other.real && @imaginary == other.imaginary
-    (self - other).abs < 1e-15
+    (self - other).abs < 1e-15 # diff not greater than 10^-15, 0.000000000000001
   end
 
   def exp

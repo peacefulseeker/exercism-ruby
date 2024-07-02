@@ -1,16 +1,21 @@
 class Robot
   DIRECTIONS = %i[north east south west].freeze
 
-  attr_reader :bearing, :coordinates
-
-  def at(x, y)
-    @coordinates = [x, y]
-  end
+  attr_reader :bearing
 
   def orient(direction)
     raise ArgumentError unless DIRECTIONS.include?(direction)
 
     @bearing = direction
+  end
+
+  def at(x, y)
+    @x = x
+    @y = y
+  end
+
+  def coordinates
+    [@x, @y]
   end
 
   def turn_right
@@ -24,13 +29,13 @@ class Robot
   def advance
     case @bearing
     when :north
-      @coordinates[1] += 1
+      @y += 1
     when :south
-      @coordinates[1] -= 1
+      @y -= 1
     when :east
-      @coordinates[0] += 1
+      @x += 1
     when :west
-      @coordinates[0] -= 1
+      @x -= 1
     end
   end
 

@@ -4,7 +4,7 @@ class Character < OpenStruct; end
 
 class House
   CHARACTERS = [
-    Character.new(name: 'house that Jack built.', action: nil),
+    Character.new(name: 'house that Jack built.'),
     Character.new(name: 'malt', action: 'lay in'),
     Character.new(name: 'rat', action: 'ate'),
     Character.new(name: 'cat', action: 'killed'),

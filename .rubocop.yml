@@ -16,3 +16,6 @@ Layout/FirstHashElementIndentation:
 
 Style/Documentation:
   Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma

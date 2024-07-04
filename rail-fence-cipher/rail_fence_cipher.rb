@@ -8,6 +8,15 @@ class RailFenceCipher
   end
 
   def encode(text, rails)
+    walk = rail_walk(rails, text.length)
+    rails = Array.new(rails) { '' }
+    walk.zip(text.chars) do |row, char|
+      rails[row] << char
+    end
+    rails.join
+  end
+
+  def encode_old(text, rails)
     return text if identical_output?(rails, text)
 
     increment = 1
@@ -70,5 +79,11 @@ class RailFenceCipher
 
   def field(rails, text)
     Array.new(rails) { Array.new(text.length) }
+  end
+
+  def rail_walk(rails, length)
+    down = 0.upto(rails - 1) # ,e.g. rails = 5, down = 0..4 => 0, 1, 2, 3, 4
+    up = (rails - 2).downto(1) # ,e.g. rails = 5, up = 3..1 => 3, 2, 1
+    [*down, *up].cycle.first(length) # loop until length is reached, with length 6 => [0, 1, 2, 3, 4, 3]
   end
 end

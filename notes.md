@@ -58,6 +58,12 @@ Array.unshift # puts element in front (that's O^n operation)
 # is there any element in array which has no reminder from division of 5
 # _1 -> first position argument passed, <element> in this case
 [5, 2, 1].any? { (5 % _1).zero? }
+
+[1, 2].cycle(2) # [1, 2, 1, 2]
+c = [1, 2].cycle
+c.next # => 1
+c.next # => 2
+[1, 2].cycle.first(6) # => [1, 2, 1, 2, 1, 2]
 ```
 
 ### Hash

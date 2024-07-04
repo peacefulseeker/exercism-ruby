@@ -1,6 +1,7 @@
 require 'minitest/autorun'
 require_relative 'rail_fence_cipher'
 # require_relative 'rail_fence_gchan'
+# require_relative 'rail_fence_jhass'
 
 class RailFenceCipherTest < Minitest::Test
   def test_encode_with_empty_string

@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require_relative 'rail_fence_cipher'
+# require_relative 'rail_fence_gchan'
 
 class RailFenceCipherTest < Minitest::Test
   def test_encode_with_empty_string
@@ -19,6 +20,11 @@ class RailFenceCipherTest < Minitest::Test
   def test_encode_with_seven_rails
     assert_equal 'TTHNHEIEDSDSEIELVLTIIA',
                  RailFenceCipher.encode('THEDEVILISINTHEDETAILS', 7)
+  end
+
+  def test_encode_with_eight_rails
+    assert_equal 'TEHHDETEDNTEIAVSIIILLS',
+                 RailFenceCipher.encode('THEDEVILISINTHEDETAILS', 8)
   end
 
   def test_encode_with_three_rails
@@ -57,6 +63,11 @@ class RailFenceCipherTest < Minitest::Test
   def test_decode_with_seven_rails
     assert_equal 'THEDEVILISINTHEDETAILS',
                  RailFenceCipher.decode('TTHNHEIEDSDSEIELVLTIIA', 7)
+  end
+
+  def test_decode_with_eight_rails
+    assert_equal 'THEDEVILISINTHEDETAILS',
+                 RailFenceCipher.decode('TEHHDETEDNTEIAVSIIILLS', 8)
   end
 
   def test_decode_alexey_with_two_rails

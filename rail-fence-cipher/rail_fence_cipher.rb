@@ -37,8 +37,22 @@ class RailFenceCipher
       if first_row || last_row
         row_char_indices = (row..text_length - 1).step(max_index_gap).to_a
       else
-        index_gap = max_index_gap - row * 2
-        row_char_indices = (row..text_length - 1).step(index_gap).to_a
+        next_index_to_add = row
+        row_char_indices = (row..text_length - 1).map.with_object([]) do |index, indices|
+          next if index != next_index_to_add
+
+          indices.push(index)
+          next_index_to_add = if indices.size.even? && !indices.empty?
+                                # downward direction search
+                                # at this point we assume, that after adding 2,4,6 items,
+                                # the zig zag finishes/finished its cycle and the next potential
+                                # item will be found going downward.
+                                next_index_to_add + row + row
+                              else
+                                # upward direction search
+                                next_index_to_add + (max_index_gap - row * 2)
+                              end
+        end
       end
       row_chars = text.slice!(0, row_char_indices.length)
       row_chars.chars.zip(row_char_indices).each do |char, index|

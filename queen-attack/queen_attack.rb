@@ -6,11 +6,7 @@ class Queens
   end
 
   def attack?
-    @white.row == @black.row || @white.col == @black.col || diagonal?
-  end
-
-  def diagonal?
-    (@white.row - @black.row).abs == (@white.col - @black.col).abs
+    @white.can_attack?(@black)
   end
 end
 
@@ -22,6 +18,13 @@ class Queen
   end
 
   attr_reader :row, :col
+
+  def can_attack?(other)
+    row == other.row || col == other.col ||
+      (row - other.row).abs == (col - other.col).abs
+  end
+
+  private
 
   def validate(coords)
     raise ArgumentError unless coords.all? { |coord| coord.between?(0, 7) }

@@ -17,7 +17,7 @@ module RailFenceCipher
 
       walk = rail_walk(rails, input.size)
       lengths = rails.times.map { |rail| walk.count(rail) }
-      offsets = lengths.each_with_object([0]) { |length, offsets| offsets << offsets.last + length }
+      offsets = lengths.each_with_object([0]) { |length, offsets| offsets << offsets.last + length } # rubocop:disable Lint/ShadowingOuterLocalVariable
       rails = lengths.zip(offsets).map { |length, offset| input[offset, length].chars }
       walk.map { |rail| rails[rail].shift }.join
     end

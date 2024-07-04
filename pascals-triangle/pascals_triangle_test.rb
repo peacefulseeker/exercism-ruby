@@ -1,6 +1,9 @@
 require 'minitest/autorun'
 require_relative 'pascals_triangle'
 
+# Triangle = TriangleEric
+Triangle = TriangleGchan
+
 class TriangleTest < Minitest::Test
   def test_one_row
     triangle = Triangle.new(1)

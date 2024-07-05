@@ -1,8 +1,9 @@
 class Game
   class BowlingError < StandardError; end
 
-  BONUS_BALLS_AFTER_STRIKE = 2
   BONUS_BALLS_AFTER_SPARE = 1
+  BONUS_BALLS_AFTER_STRIKE = 2
+  STRIKE_SCORE = 10
 
   def initialize
     @frames = []
@@ -10,47 +11,46 @@ class Game
   end
 
   def roll(pins)
-    last_frame = @frames[@frames.size - 1]
-    frame_before_last = @frames[@frames.size - 2]
-    raise Game::BowlingError unless pins.between?(0, 10)
-    raise Game::BowlingError if @frames.size >= @frames_allowance && frame_completed?(last_frame)
-    if bonus_roll? && (
-      (frame_completed?(last_frame) && !strike?(last_frame) && !spare?(last_frame)) ||
-         (spare?(frame_before_last) && !frame_completed?(last_frame)) ||
-         (strike?(frame_before_last) && last_frame[0] != 10 && pins == 10)
-    )
-      raise Game::BowlingError
+    last_frame = @frames[-1]
+    raise Game::BowlingError unless pins.between?(0, STRIKE_SCORE)
+    raise Game::BowlingError if @frames.size >= @frames_allowance && last_frame.completed?
+
+    if bonus_roll?
+      frame_before_last = @frames[-2]
+      if cannot_roll_strike_after_bonus_roll_non_strike?(last_frame, frame_before_last, pins) ||
+         cannot_roll_after_bonus_open_frame_roll?(last_frame) ||
+         cannot_roll_after_bonus_roll_for_spare?(last_frame, frame_before_last)
+
+        raise Game::BowlingError
+      end
     end
 
-    if pins == 10
-      @frames << [10, 0]
+    if pins == STRIKE_SCORE
+      @frames.push(Frame.new(pins))
       @frames_allowance += BONUS_BALLS_AFTER_STRIKE if tenth_frame?
-    elsif last_frame.nil? || (!last_frame[0].nil? && !last_frame[1].nil?)
-      add_new_frame(pins)
-    elsif last_frame[1].nil?
-      first_throw = last_frame[0]
-      combo = first_throw + pins
-      raise Game::BowlingError if combo > 10
+    elsif last_frame && !last_frame.completed?
+      first_throw = last_frame.first
+      potential_sum = first_throw + pins
+      raise Game::BowlingError if potential_sum > STRIKE_SCORE
 
-      @frames[@frames.size - 1][1] = pins
-
-      @frames_allowance += BONUS_BALLS_AFTER_SPARE if combo == 10 && tenth_frame?
+      @frames_allowance += BONUS_BALLS_AFTER_SPARE if potential_sum == STRIKE_SCORE && tenth_frame?
+      last_frame.add(pins)
     else
-      add_new_frame(pins)
+      add_frame(pins)
     end
   end
 
   def score
     raise Game::BowlingError unless @frames.size.between?(10, @frames_allowance)
-    raise Game::BowlingError if (strike?(@frames[9]) || spare?(@frames[9])) && @frames.size < 11
-    raise Game::BowlingError if strike?(@frames[9]) && strike?(@frames[10]) && @frames.size < 12
+    raise Game::BowlingError if (@frames[9].strike? || @frames[9].spare?) && @frames.size < 11
+    raise Game::BowlingError if @frames[9].strike? && @frames[10].strike? && @frames.size < 12
 
     score = 0
 
     @frames.each.with_index do |frame, index|
-      score += 10 + strike_bonus(index) if strike?(frame)
-      score += 10 + spare_bonus(index) if spare?(frame)
-      score += open_frame_score(frame) if open_frame?(frame)
+      score += 10 + strike_bonus(index) if frame.strike?
+      score += 10 + spare_bonus(index) if frame.spare?
+      score += open_frame_score(frame) if frame.open_frame?
     end
 
     score
@@ -58,12 +58,20 @@ class Game
 
   private
 
-  def frame_completed?(frame)
-    frame[0] && frame[1]
+  def cannot_roll_after_bonus_open_frame_roll?(last_frame)
+    last_frame.completed? && last_frame.open_frame?
   end
 
-  def add_new_frame(pins)
-    @frames << [pins, nil]
+  def cannot_roll_strike_after_bonus_roll_non_strike?(last_frame, frame_before_last, pins)
+    frame_before_last.strike? && last_frame.first != STRIKE_SCORE && pins == STRIKE_SCORE
+  end
+
+  def cannot_roll_after_bonus_roll_for_spare?(last_frame, frame_before_last)
+    !last_frame.completed? && frame_before_last.spare?
+  end
+
+  def add_frame(pins)
+    @frames.push(Frame.new(pins))
   end
 
   def bonus_roll?
@@ -78,33 +86,60 @@ class Game
     frame_next = @frames[frame_index + 1]
     return 0 if frame_next.nil? || frame_index >= 9
 
-    frame_following_next = @frames[frame_index + 2]
+    frame_after_next = @frames[frame_index + 2]
 
-    sum = frame_next.sum
-    sum += frame_following_next[0] if frame_following_next && strike?(frame_next)
-    sum
+    [
+      frame_next.sum,
+      (frame_after_next && frame_next.strike? ? frame_after_next.first : 0),
+    ].sum
   end
 
   def spare_bonus(frame_index)
     frame_next = @frames[frame_index + 1]
     return 0 if frame_next.nil? || frame_index >= 9
 
-    frame_next[0]
+    frame_next.first
   end
 
   def open_frame_score(frame)
-    frame[0] + (frame[1] || 0)
+    frame.first + (frame.second || 0)
+  end
+end
+
+class Frame
+  def initialize(pins)
+    @throws = [pins, pins == Game::STRIKE_SCORE ? 0 : nil]
   end
 
-  def open_frame?(frame)
-    frame && frame[0] + (frame[1] || 0) < 10
+  def add(pins)
+    @throws[1] = pins
   end
 
-  def strike?(frame)
-    frame && frame[0] == 10
+  def first
+    @throws.first
   end
 
-  def spare?(frame)
-    !strike?(frame) && frame[0] + (frame[1] || 0) == 10
+  def second
+    @throws.last
+  end
+
+  def completed?
+    @throws.none?(&:nil?)
+  end
+
+  def sum
+    @throws.sum
+  end
+
+  def strike?
+    first == Game::STRIKE_SCORE
+  end
+
+  def spare?
+    !strike? && first + (second || 0) == Game::STRIKE_SCORE
+  end
+
+  def open_frame?
+    first + (second || 0) < Game::STRIKE_SCORE
   end
 end

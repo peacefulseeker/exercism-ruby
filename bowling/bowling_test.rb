@@ -1,5 +1,8 @@
 require 'minitest/autorun'
 require_relative 'bowling'
+# require_relative 'bowling_laszpio'
+# require_relative 'bowling_unused'
+# require_relative 'bowling_original'
 
 class BowlingTest < Minitest::Test
   def test_should_be_able_to_score_a_game_with_all_zeros

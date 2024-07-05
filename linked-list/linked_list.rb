@@ -20,8 +20,17 @@ class Deque
     @tail = @head
   end
 
+  def clear_head_and_tail
+    @head = nil
+    @tail = nil
+  end
+
+  def empty?
+    @size.zero?
+  end
+
   def push(value)
-    if @size.zero?
+    if empty?
       create_first_node(value)
     else
       node = Node.new(value)
@@ -34,7 +43,7 @@ class Deque
 
   # prepends value to the front of the deque
   def unshift(value)
-    if @size.zero?
+    if empty?
       create_first_node(value)
     else
       node = Node.new(value)
@@ -49,6 +58,7 @@ class Deque
     tail_value = @tail.value
     @tail = @tail.prev
     @size -= 1
+    clear_head_and_tail if empty?
     tail_value
   end
 
@@ -57,6 +67,7 @@ class Deque
     head_value = @head.value
     @head = @head.next
     @size -= 1
+    clear_head_and_tail if empty?
     head_value
   end
 end

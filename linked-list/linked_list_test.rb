@@ -8,6 +8,8 @@ class DequeTest < Minitest::Test
     deque.push(20)
     assert_equal 20, deque.pop
     assert_equal 10, deque.pop
+
+    assert deque.empty? # rubocop:disable Minitest/AssertEmpty
   end
 
   def test_push_shift
@@ -24,6 +26,8 @@ class DequeTest < Minitest::Test
     deque.unshift(20)
     assert_equal 20, deque.shift
     assert_equal 10, deque.shift
+
+    assert deque.empty? # rubocop:disable Minitest/AssertEmpty
   end
 
   def test_unshift_pop
@@ -32,6 +36,8 @@ class DequeTest < Minitest::Test
     deque.unshift(20)
     assert_equal 10, deque.pop
     assert_equal 20, deque.pop
+
+    assert deque.empty? # rubocop:disable Minitest/AssertEmpty
   end
 
   def test_example
@@ -46,6 +52,8 @@ class DequeTest < Minitest::Test
     assert_equal 40, deque.shift
     assert_equal 50, deque.pop
     assert_equal 30, deque.shift
+
+    assert deque.empty? # rubocop:disable Minitest/AssertEmpty
   end
 
   def test_pop_to_empty
@@ -54,6 +62,7 @@ class DequeTest < Minitest::Test
     assert_equal 10, deque.pop
     deque.push(20)
     assert_equal 20, deque.shift
+    assert deque.empty? # rubocop:disable Minitest/AssertEmpty
   end
 
   def test_shift_to_empty
@@ -62,5 +71,6 @@ class DequeTest < Minitest::Test
     assert_equal 10, deque.shift
     deque.unshift(20)
     assert_equal 20, deque.pop
+    assert deque.empty? # rubocop:disable Minitest/AssertEmpty
   end
 end

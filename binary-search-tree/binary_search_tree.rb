@@ -19,22 +19,20 @@ class Bst
     @root.right
   end
 
-  def insert(data)
-    cur = @root
-
-    while cur
-      if cur.left && data <= cur.data
-        cur = cur.left
-      elsif cur.right && data > cur.data
-        cur = cur.right
-      else
-        break cur
-      end
-    end
+  def insert(data, cur = @root)
+    # insert into left branch
     if data <= cur.data
-      cur.left = Node.new(data)
-    else
+      if cur.left.nil?
+        cur.left = Node.new(data)
+      else
+        insert(data, cur.left)
+      end
+
+    # insert into right branch
+    elsif cur.right.nil?
       cur.right = Node.new(data)
+    else
+      insert(data, cur.right)
     end
   end
 

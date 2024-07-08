@@ -11,7 +11,7 @@ class Game
   end
 
   def roll(pins)
-    raise Game::BowlingError unless pins.between?(PINS[:MIN], PINS[:MAX])
+    raise BowlingError unless pins.between?(PINS[:MIN], PINS[:MAX])
 
     validate_pins_on_bonus_roll_frames(pins) if bonus_roll?
 
@@ -20,21 +20,16 @@ class Game
       @frames.push(Frame.new(pins))
       @frames_allowance += BONUS_BALLS_AFTER_STRIKE if tenth_frame?
     elsif last_frame&.open?
-      first_throw = last_frame.first
-      potential_sum = first_throw + pins
-      raise Game::BowlingError if potential_sum > PINS[:MAX]
-
-      @frames_allowance += BONUS_BALLS_AFTER_SPARE if potential_sum == PINS[:MAX] && tenth_frame?
-      last_frame.throw(pins)
+      throw_open_frame(last_frame, pins)
     else
       add_frame(pins)
     end
   end
 
   def score
-    raise Game::BowlingError unless @frames.size.between?(10, @frames_allowance)
-    raise Game::BowlingError if (@frames[9].strike? || @frames[9].spare?) && @frames.size < 11
-    raise Game::BowlingError if @frames[9].strike? && @frames[10].strike? && @frames.size < 12
+    raise BowlingError unless @frames.size.between?(10, @frames_allowance)
+    raise BowlingError if (@frames[9].strike? || @frames[9].spare?) && @frames.size < 11
+    raise BowlingError if @frames[9].strike? && @frames[10].strike? && @frames.size < 12
 
     score = 0
 
@@ -52,6 +47,15 @@ class Game
 
   private
 
+  def throw_open_frame(last_frame, pins)
+    first_throw = last_frame.first
+    potential_sum = first_throw + pins
+    raise BowlingError if potential_sum > PINS[:MAX]
+
+    @frames_allowance += BONUS_BALLS_AFTER_SPARE if potential_sum == PINS[:MAX] && tenth_frame?
+    last_frame.throw(pins)
+  end
+
   def validate_pins_on_bonus_roll_frames(pins)
     last_frame = @frames[-1]
     frame_before_last = @frames[-2]
@@ -59,7 +63,7 @@ class Game
        cannot_roll_after_bonus_open_frame_roll?(last_frame) ||
        cannot_roll_after_bonus_roll_for_spare?(last_frame, frame_before_last)
 
-      raise Game::BowlingError
+      raise BowlingError
     end
   end
 

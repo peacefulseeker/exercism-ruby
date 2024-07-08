@@ -3,10 +3,6 @@ class Bst
     @root = Node.new(data)
   end
 
-  def to_s
-    data
-  end
-
   def data
     @root.data
   end
@@ -46,12 +42,12 @@ class Bst
     data
   end
 
-  def traverse
+  def items
     inorder_traverse(@root)
   end
 
   def each(&block)
-    traverse.each(&block)
+    items.each(&block)
   end
 end
 
@@ -63,8 +59,4 @@ class Node
   end
 
   attr_accessor :data, :left, :right
-
-  def to_s
-    data
-  end
 end
